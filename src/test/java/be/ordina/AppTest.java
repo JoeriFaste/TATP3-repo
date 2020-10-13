@@ -65,4 +65,50 @@ public class AppTest {
         assertTrue("the message <" + message + "> doesn't contain the right username <" + username + ">", message.contains(username));
 
     }
+
+    @Test
+    public void successfulUserLogin() throws InterruptedException {
+        driver.get("https://www.plex.tv/nl");
+        driver.manage().window().maximize();
+        Thread.sleep(2000);
+        WebElement signUpBtn = driver.findElement(By.xpath("//a[@class='signup button']"));
+        signUpBtn.click();
+        Thread.sleep(2000);
+        driver.switchTo().frame("fedauth-iFrame");
+        Thread.sleep(2000);
+        WebElement emailInput = driver.findElement(By.id("email"));
+        String email = getAlphanumericString(8) + "@mailinator.com";
+        emailInput.sendKeys(email);
+        Thread.sleep(2000);
+        WebElement passwordInput = driver.findElement(By.id("password"));
+        String password = "testPaswoord1";
+        passwordInput.sendKeys(password);
+        Thread.sleep(2000);
+        WebElement formBtn = driver.findElement(By.xpath("//button[@type='submit']"));
+        formBtn.click();
+        Thread.sleep(7000);
+        // <span class="PageHeaderBreadcrumbButton-link-30Jgzu">Home</span>
+        WebElement confirmationTextHome = driver.findElement(By.xpath("//span[contains(@class,'PageHeaderBreadcrumbButton')]"));
+        Thread.sleep(7000);
+        String messageHome = confirmationTextHome.getText();
+        assertTrue(messageHome.contains("Home"));
+
+    }
+    static String getAlphanumericString(int n){
+        // chose a character random from this string
+        String AlphaNumericString = "ABCEFGHIJKLMNOPQRSTUVWXYZ"
+                + "0123456789" + "abcdefghijklmnopqrstuvwxyz";
+        // create StringBuffer size of AlphaNumeriString
+        StringBuilder sb = new StringBuilder(n);
+        for (int i = 0; i<n; i++){
+            // generate a random number between 0
+            // to AlphaNumericString variabele length
+            int index = (int) (AlphaNumericString.length()
+                    * Math.random() );
+            // add character one by one in end of sb
+            sb.append(AlphaNumericString.charAt(index));
+        }
+        return sb.toString();
+    }
+
 }
